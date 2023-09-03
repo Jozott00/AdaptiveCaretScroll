@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PUBLISH_TOKEN: ${{ secrets.JB_TOKEN }}
+#      PLUGIN_VERSION:
 #      PLUGIN_VERSION: ${{ github.ref }}
     steps:
       - uses: actions/setup-java@v1
@@ -27,7 +28,6 @@ jobs:
 
       - name: build and publish plugin
         run: |
-          ls ./build/distributions
           ./gradlew buildPlugin 
           ls ./build/distributions
 #          ./gradlew --no-daemon publishPlugin
