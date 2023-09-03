@@ -15,6 +15,11 @@ Adaptive Caret Scroll is an IntelliJ IDEA plugin that enhances the editor's scro
 - Configurable top and bottom padding settings
 - Immediate integration with any newly-opened or existing editor instances within the IDE
 
+## Roadmap
+
+- [ ] Always centered feature
+- [ ] Disable checkbox setting
+
 ## Installation
 
 1. Download the `.zip` file from the GitHub releases.
