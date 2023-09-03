@@ -34,7 +34,7 @@ jobs:
         run: ls -R ./build/distributions
 
       - name: Publish to JetBrains Marketplace
-        uses: ChrisCarini/intellij-platform-plugin-verifier-action@v1
+        uses: ChrisCarini/intellij-platform-plugin-verifier-action@latest
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           jbToken: ${{ secrets.JB_TOKEN }}
