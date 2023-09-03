@@ -1,0 +1,37 @@
+
+<idea-plugin>
+    <id>com.dobodox.AdaptiveCaretScroll</id>
+
+
+    <name>Adaptive Caret Scroll</name>
+
+    <vendor email="official@johannes-zottele.at" url="https://github.com/Jozott00/AdaptiveCaretScroll">Jozott</vendor>
+
+    <description><![CDATA[
+    <h1>Adaptive Caret Scroll: Enhanced Scrolling Behavior for JetBrain's Editors</h1>
+    <p>
+      <strong>AdaptiveCaretScroll</strong> modifies the default scrolling behavior of the JetBrain editors to automatically adjust the view when the caret nears the top or bottom edges.
+    </p>
+    <p>
+      <strong>Functionalities:</strong>
+    </p>
+    <ul>
+      <li>Automatically triggers editor scrolling when the caret is within a user-defined distance from the top or bottom edge.</li>
+      <li>Provides configuration options for setting the distance from the top and bottom edges where scrolling is activated.</li>
+    </ul>
+  ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="com.dobodox.adaptivecaretscroll.ScrollPluginStartup"/>
+
+        <applicationService serviceImplementation="com.dobodox.adaptivecaretscroll.settings.ScrollPluginSettingsService"/>
+        <applicationConfigurable
+            parentId="tools"
+            instance="com.dobodox.adaptivecaretscroll.settings.ScrollPluginConfigurable"
+            id="com.dobodox.adaptivecaretscroll.settings.ScrollPluginConfigurable"
+            displayName="Adaptive Caret Scroll"/>
+    </extensions>
+
+</idea-plugin>
