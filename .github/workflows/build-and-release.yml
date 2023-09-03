@@ -37,6 +37,8 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
