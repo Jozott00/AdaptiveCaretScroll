@@ -1,9 +1,11 @@
 name: Build and Publish Plugin
 
-on:
-  push:
-    tags:
-      - 'v*'
+on: push
+
+#on:
+#  push:
+#    tags:
+#      - 'v*'
 
 jobs:
   gradle:
