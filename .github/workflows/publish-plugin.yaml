@@ -1,18 +1,15 @@
 name: Build and Publish Plugin
 
-on: push
-#on:
-#  push:
-#    tags:
-#      - 'v*'
+on:
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   gradle:
     runs-on: ubuntu-latest
     env:
       PUBLISH_TOKEN: ${{ secrets.JB_TOKEN }}
-#      PLUGIN_VERSION: 1.0.2
-#      PLUGIN_VERSION: ${{ github.ref }}
     steps:
       - name: Extract Version Tag
         run: echo "PLUGIN_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
@@ -37,22 +34,22 @@ jobs:
 #          ./gradlew --no-daemon publishPlugin
 
       - name: Create Github Release
+        id: create-release
         uses: actions/create-release@v1
-        id: create_release
         with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
-          tag_name: ${{ github.ref }}
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
 
       - name: Upload Artifact
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: ./build/distributions/AdaptiveCaretScroll-${{ env.PLUGIN_VERSION }}.zip
           asset_name: AdaptiveCaretScroll-${{ env.PLUGIN_VERSION }}.zip
           asset_content_type: application/gzip
