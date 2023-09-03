@@ -17,9 +17,9 @@ Adaptive Caret Scroll is an IntelliJ IDEA plugin that enhances the editor's scro
 
 ## Installation
 
-1. Download the `.jar` file from the GitHub releases.
+1. Download the `.zip` file from the GitHub releases.
 2. Open IntelliJ IDEA, go to `File > Settings > Plugins`.
-3. Click `Install Plugin from Disk` and select the downloaded `.jar` file.
+3. Click `Install Plugin from Disk` and select the downloaded `.zip` file.
 
 Or install it directly from IntelliJ's Plugin Marketplace.
 
@@ -32,22 +32,6 @@ Or install it directly from IntelliJ's Plugin Marketplace.
 ## How to Use
 
 Once installed and configured, the plugin will automatically adjust the editor's scrolling behavior based on the configured settings and the caret's current position.
-
-## Development
-
-### Prerequisites
-
-- Java JDK 11 or higher
-- IntelliJ IDEA
-
-### Building from Source
-
-1. Clone the repository:  
-   `git clone https://github.com/username/adaptive-caret-scroll.git`
-2. Open the project in IntelliJ IDEA.
-3. Navigate to `File > Project Structure > Project SDK` and ensure the JDK version is set correctly.
-4. Build the project:  
-   `Build > Build Project`
 
 ## Contributing
 
