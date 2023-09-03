@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 jobs:
-  gradle:
+  build-and-release:
     runs-on: ubuntu-latest
     env:
       PUBLISH_TOKEN: ${{ secrets.JB_TOKEN }}
