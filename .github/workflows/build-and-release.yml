@@ -33,13 +33,13 @@ jobs:
       - name: List files in ./build/distributions
         run: ls -R ./build/distributions
 
-      - name: Publish to JetBrains Marketplace
-        uses: ChrisCarini/intellij-platform-plugin-verifier-action@latest
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          jbToken: ${{ secrets.JB_TOKEN }}
-          pluginId: com.dobodox.AdaptiveCaretScroll
-          pluginJarFilePath: ./build/distributions/AdaptiveCaretScroll-1.0-SNAPSHOT.zip
+#      - name: Publish to JetBrains Marketplace
+#        uses: ChrisCarini/intellij-platform-plugin-verifier-action@latest
+#        with:
+#          githubToken: ${{ secrets.GITHUB_TOKEN }}
+#          jbToken: ${{ secrets.JB_TOKEN }}
+#          pluginId: com.dobodox.AdaptiveCaretScroll
+#          pluginJarFilePath: ./build/distributions/AdaptiveCaretScroll-1.0-SNAPSHOT.zip
 
       - name: Create GitHub Release
         id: create-release
