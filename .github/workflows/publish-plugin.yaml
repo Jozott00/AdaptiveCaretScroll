@@ -1,11 +1,9 @@
 name: Build and Publish Plugin
 
-on: push
-
-#on:
-#  push:
-#    tags:
-#      - 'v*'
+on:
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   gradle:
@@ -14,7 +12,7 @@ jobs:
       PUBLISH_TOKEN: ${{ secrets.JB_TOKEN }}
     steps:
       - name: Extract Version Tag
-        run: echo "PLUGIN_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        run: echo "PLUGIN_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - uses: actions/setup-java@v1
         with:
@@ -33,7 +31,7 @@ jobs:
           echo ${{ env.PLUGIN_VERSION }}
           ./gradlew buildPlugin 
           ls ./build/distributions
-#          ./gradlew --no-daemon publishPlugin
+          ./gradlew publishPlugin
 
       - name: Create Github Release
         id: create-release
