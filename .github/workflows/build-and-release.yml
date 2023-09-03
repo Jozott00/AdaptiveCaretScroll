@@ -29,6 +29,18 @@ jobs:
       - name: Build IntelliJ Plugin JAR
         run: ./gradlew buildPlugin
 
+      # Debugging step to list files
+      - name: List files in ./build/distributions
+        run: ls -R ./build/distributions
+
+      - name: Publish to JetBrains Marketplace
+        uses: ChrisCarini/intellij-platform-plugin-verifier-action@v1
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          jbToken: ${{ secrets.JB_TOKEN }}
+          pluginId: com.dobodox.AdaptiveCaretScroll
+          pluginJarFilePath: ./build/distributions/AdaptiveCaretScroll.jar
+
       - name: Create GitHub Release
         id: create-release
         uses: actions/create-release@v1
