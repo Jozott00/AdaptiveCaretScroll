@@ -1,16 +1,17 @@
 name: Build and Publish Plugin
 
-on:
-  push:
-    tags:
-      - 'v*'
+on: push
+#on:
+#  push:
+#    tags:
+#      - 'v*'
 
 jobs:
   gradle:
     runs-on: ubuntu-latest
     env:
       PUBLISH_TOKEN: ${{ secrets.JB_TOKEN }}
-      PLUGIN_VERSION: ${{ github.ref }}
+#      PLUGIN_VERSION: ${{ github.ref }}
     steps:
       - uses: actions/setup-java@v1
         with:
@@ -26,9 +27,10 @@ jobs:
 
       - name: build and publish plugin
         run: |
-          ./gradlew --no-daemon buildPlugin 
           ls ./build/distributions
-          ./gradlew --no-daemon publishPlugin
+          ./gradlew buildPlugin 
+          ls ./build/distributions
+#          ./gradlew --no-daemon publishPlugin
           
     
 
