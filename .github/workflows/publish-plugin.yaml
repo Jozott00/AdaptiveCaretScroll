@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PUBLISH_TOKEN: ${{ secrets.JB_TOKEN }}
-#      PLUGIN_VERSION:
+      PLUGIN_VERSION: 1.0.2
 #      PLUGIN_VERSION: ${{ github.ref }}
     steps:
       - uses: actions/setup-java@v1
