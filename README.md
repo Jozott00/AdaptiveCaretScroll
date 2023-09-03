@@ -1,4 +1,9 @@
-# Adaptive Caret Scroll Plugin for IntelliJ IDEA
+
+<div align="center">
+  <img src="media/pluginIcon.png" alt="Plugin Icon" width="128">
+  <h2>Adaptive Caret Scroll</h2>
+  <h4>an Intellij IDEA Plugin</h4>
+</div>
 
 ## Overview
 
