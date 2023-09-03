@@ -17,11 +17,18 @@ jobs:
           java-version: 17
       - uses: actions/checkout@v2
 
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
       - name: build and publish plugin
         run: |
-          ./gradlew buildPlugin
-          ls /build/distributions
-          ./gradlew publishPlugin
+          ./gradlew --no-daemon buildPlugin 
+          ls ./build/distributions
+          ./gradlew --no-daemon publishPlugin
           
     
 
