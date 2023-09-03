@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.dobodox"
-version = "1.0-SNAPSHOT"
+version = System.getenv("PLUGIN_VERSION")
 
 repositories {
     mavenCentral()
@@ -35,13 +35,14 @@ tasks {
         untilBuild.set("232.*")
     }
 
-    signPlugin {
-        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
-        privateKey.set(System.getenv("PRIVATE_KEY"))
-        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
-    }
+//    signPlugin {
+//        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
+//        privateKey.set(System.getenv("PRIVATE_KEY"))
+//        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
+//    }
 
     publishPlugin {
-        token.set(System.getenv("PUBLISH_TOKEN"))
+        token = System.getenv("PUBLISH_TOKEN")
+//        token.set(System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken"))
     }
 }

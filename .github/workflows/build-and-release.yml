@@ -1,9 +1,9 @@
 name: Build and Release IntelliJ Plugin
 
-on:
-  push:
-    tags:
-      - 'v*'
+#on:
+#  push:
+#    tags:
+#      - 'v*'
 
 jobs:
   build-and-release:

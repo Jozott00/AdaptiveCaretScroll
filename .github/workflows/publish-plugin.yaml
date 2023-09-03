@@ -1,0 +1,29 @@
+name: Build and Publish Plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  gradle:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./tools-plugin/intellij
+      PUBLISH_TOKEN: ${{ secrets.JB_TOKEN }}
+      PLUGIN_VERSION: ${{ github.ref }}
+    steps:
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - uses: actions/checkout@v2
+
+      - name: build and publish plugin
+        working-directory: ${{env.working-directory}}
+        run: |
+          ./gradlew buildPlugin
+          ls /build/distributions
+          ./gradlew publishPlugin
+          
+    
+
