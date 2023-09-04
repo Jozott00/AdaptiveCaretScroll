@@ -1,11 +1,14 @@
 package com.dobodox.adaptivecaretscroll.settings
 
+import com.intellij.openapi.ui.ComboBox
+import com.intellij.ui.TitledSeparator
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.fields.IntegerField
 import com.intellij.util.ui.FormBuilder
+import java.awt.Component
 import java.awt.FlowLayout
-import javax.swing.JComponent
-import javax.swing.JPanel
+import java.awt.Font
+import javax.swing.*
 
 
 /**
@@ -15,11 +18,21 @@ import javax.swing.JPanel
 class PluginSettingsComponent {
 
     var panel: JPanel? = null
+    private val activateCheckbox = JCheckBox("Enable adaptive caret scrolling").apply {
+        addItemListener {
+            updateFieldAccessibility()
+        }
+    }
     private val topLines = IntegerField()
     private val bottomLines = IntegerField()
+    private val scrollModeDropdown = ComboBox(ScrollMode.values()).apply {
+        addItemListener {
+            updatePaddingFieldsVisibility()
+        }
+    }
 
-    init {
-        // Lambda function for creating a JPanel with an IntegerField and a label
+
+    private val paddingForm = FormBuilder.createFormBuilder().apply {
         val input = { field: IntegerField ->
             val flowLayoutPanel = JPanel(FlowLayout(FlowLayout.LEFT, 0, 0))
             flowLayoutPanel.add(field)
@@ -27,20 +40,73 @@ class PluginSettingsComponent {
             flowLayoutPanel
         }
 
+        addComponent(TitledSeparator("Padding Settings"))
+        addComponent(FormBuilder.createFormBuilder().apply {
+            addLabeledComponent("Top padding:", input(topLines))
+            addLabeledComponent("Bottom padding:", input(bottomLines))
+
+            panel.border = BorderFactory.createEmptyBorder(0, 20, 0, 0)
+        }.panel)
+
+    }.panel
+
+    init {
+
+        val generalForm = FormBuilder.createFormBuilder().apply {
+            addComponent(activateCheckbox)
+            addVerticalGap(5)
+            addLabeledComponent(JBLabel("Scrolling mode:"), scrollModeDropdown, 1, false)
+
+            panel.border = BorderFactory.createEmptyBorder(0, 20, 0, 0)
+        }
+
+
         // Create form using FormBuilder
         panel = FormBuilder.createFormBuilder()
-            .addLabeledComponent(JBLabel("Top padding:"), input(topLines), 1, false)
-            .addLabeledComponent(JBLabel("Bottom padding:"), input(bottomLines), 1, false)
+            .addComponent(TitledSeparator("General"))
+            .addComponent(generalForm.panel)
+            .addComponent(paddingForm)
             .addComponentFillVertically(JPanel(), 0)
             .panel
+
+        updatePaddingFieldsVisibility()
+        updateFieldAccessibility()
+    }
+
+    private fun updatePaddingFieldsVisibility() {
+        val isCustomMode = scrollModeDropdown.selectedItem as ScrollMode == ScrollMode.Custom
+        paddingForm.isVisible = isCustomMode
+    }
+
+    private fun updateFieldAccessibility() {
+        val isActivated = activateCheckbox.isSelected
+        topLines.isEnabled = isActivated
+        bottomLines.isEnabled = isActivated
+        scrollModeDropdown.isEnabled = isActivated
     }
 
     /**
      * Returns the component that should receive focus initially.
      * @return JComponent that should be focused initially.
      */
-    fun getPreferredFocusedComponent(): JComponent {
-        return topLines
+    fun getPreferredFocusedComponent(): JComponent? {
+        return null
+    }
+
+    fun isEnabled(): Boolean {
+        return activateCheckbox.isSelected
+    }
+
+    fun setEnabled(checked: Boolean) {
+        activateCheckbox.isSelected = checked
+    }
+
+    fun getScrollMode(): ScrollMode {
+        return scrollModeDropdown.selectedItem as ScrollMode
+    }
+
+    fun setScrollMode(mode: ScrollMode) {
+        scrollModeDropdown.selectedItem = mode
     }
 
     /**

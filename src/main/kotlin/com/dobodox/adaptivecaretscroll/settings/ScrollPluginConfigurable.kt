@@ -28,6 +28,10 @@ class ScrollPluginConfigurable : Configurable {
         val settings = ScrollPluginSettingsService.getInstance().state
         return settings.bottomDistance != component?.getBottomLines()
                 || settings.topDistance != component?.getTopLines()
+                || settings.scrollMode != component?.getScrollMode()
+                || settings.enabled != component?.isEnabled()
+
+
     }
 
     /**
@@ -36,9 +40,17 @@ class ScrollPluginConfigurable : Configurable {
     override fun apply() {
         val bottom = component?.getBottomLines() ?: return
         val top = component?.getTopLines() ?: return
+        val scrollMode = component?.getScrollMode() ?: return
+        val enabled = component?.isEnabled() ?: return
+
         ScrollPluginSettingsService
             .getInstance()
-            .loadState(ScrollPluginSettings(bottomDistance = bottom, topDistance = top))
+            .loadState(ScrollPluginSettings(
+                enabled = enabled,
+                bottomDistance = bottom,
+                topDistance = top,
+                scrollMode = scrollMode
+            ))
     }
 
     /**
@@ -62,6 +74,9 @@ class ScrollPluginConfigurable : Configurable {
      */
     override fun reset() {
         val settings = ScrollPluginSettingsService.getInstance()
+
+        component?.setEnabled(settings.state.enabled)
+        component?.setScrollMode(settings.state.scrollMode)
         component?.setTopLines(settings.state.topDistance)
         component?.setBottomLines(settings.state.bottomDistance)
     }

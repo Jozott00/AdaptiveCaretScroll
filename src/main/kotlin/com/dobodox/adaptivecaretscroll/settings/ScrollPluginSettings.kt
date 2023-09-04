@@ -7,6 +7,13 @@ package com.dobodox.adaptivecaretscroll.settings
  * @property topDistance The number of lines to maintain between the caret and the top edge of the editor.
  */
 data class ScrollPluginSettings(
+    val enabled: Boolean = true,
+    var scrollMode: ScrollMode = ScrollMode.Custom,
     var bottomDistance: Int = 10,
     var topDistance: Int = 10
 )
+
+enum class ScrollMode {
+    Centered,
+    Custom
+}
