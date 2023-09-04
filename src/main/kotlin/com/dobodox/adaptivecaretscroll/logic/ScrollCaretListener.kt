@@ -1,6 +1,8 @@
 package com.dobodox.adaptivecaretscroll.logic
 
+import com.dobodox.adaptivecaretscroll.settings.ScrollMode
 import com.dobodox.adaptivecaretscroll.settings.ScrollPluginSettingsService
+import com.intellij.openapi.editor.ScrollType
 import com.intellij.openapi.editor.ScrollingModel
 import com.intellij.openapi.editor.event.CaretEvent
 import com.intellij.openapi.editor.event.CaretListener
@@ -15,9 +17,19 @@ class ScrollCaretListener : CaretListener {
      * @param event An instance of CaretEvent containing details about the caret position change.
      */
     override fun caretPositionChanged(event: CaretEvent) {
+        // Retrieve user-defined settings for the distance to the top and bottom
+        val settings = ScrollPluginSettingsService.getInstance().state
+        // do nothing if disabled
+        if (!settings.enabled) return
+
         val editor = event.editor
         val caretModel = editor.caretModel
         val scrollingModel = editor.scrollingModel
+
+        if (settings.scrollMode == ScrollMode.Centered) {
+            scrollingModel.scrollTo(caretModel.logicalPosition, ScrollType.CENTER)
+            return
+        }
 
         val logicalPosition = caretModel.logicalPosition
         val logicalLineY = editor.logicalPositionToXY(logicalPosition).y
@@ -31,8 +43,7 @@ class ScrollCaretListener : CaretListener {
         val linesToBottom = distanceToBottom / editor.lineHeight
         val linesToTop = distanceToTop / editor.lineHeight
 
-        // Retrieve user-defined settings for the distance to the top and bottom
-        val settings = ScrollPluginSettingsService.getInstance().state
+
         val desiredLinesToBottom = settings.bottomDistance
         val desiredLinesToTop = settings.topDistance
 
@@ -49,18 +60,5 @@ class ScrollCaretListener : CaretListener {
             val newScrollY = scrollingModel.verticalScrollOffset - deltaY
             scrollingModel.scrollVertically(newScrollY)
         }
-    }
-
-    /**
-     * Adjusts the vertical scroll position.
-     * @param scrollingModel The ScrollingModel instance of the editor.
-     * @param lineHeight The height of a line in the editor.
-     * @param currentLines The current number of lines between the caret and the edge.
-     * @param desiredLines The desired number of lines between the caret and the edge.
-     */
-    private fun adjustScrolling(scrollingModel: ScrollingModel, lineHeight: Int, currentLines: Int, desiredLines: Int) {
-        val deltaY = (currentLines - desiredLines) * lineHeight
-        val newScrollY = scrollingModel.verticalScrollOffset - deltaY
-        scrollingModel.scrollVertically(newScrollY)
     }
 }
