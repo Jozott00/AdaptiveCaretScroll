@@ -1,11 +1,12 @@
 package com.dobodox.adaptivecaretscroll.logic
 
 import com.dobodox.adaptivecaretscroll.settings.ScrollMode
+import com.dobodox.adaptivecaretscroll.settings.ScrollPluginSettings
 import com.dobodox.adaptivecaretscroll.settings.ScrollPluginSettingsService
 import com.intellij.openapi.editor.ScrollType
-import com.intellij.openapi.editor.ScrollingModel
 import com.intellij.openapi.editor.event.CaretEvent
 import com.intellij.openapi.editor.event.CaretListener
+import kotlin.math.abs
 
 /**
  * ScrollCaretListener listens to changes in caret position in an editor and adjusts the scrolling behavior.
@@ -30,6 +31,8 @@ class ScrollCaretListener : CaretListener {
             scrollingModel.scrollTo(caretModel.logicalPosition, ScrollType.CENTER)
             return
         }
+
+        if (!inCaretMovementThreshold(event, settings)) return
 
         val logicalPosition = caretModel.logicalPosition
         val logicalLineY = editor.logicalPositionToXY(logicalPosition).y
@@ -60,5 +63,11 @@ class ScrollCaretListener : CaretListener {
             val newScrollY = scrollingModel.verticalScrollOffset - deltaY
             scrollingModel.scrollVertically(newScrollY)
         }
+    }
+
+    private fun inCaretMovementThreshold(event: CaretEvent, settings: ScrollPluginSettings): Boolean {
+        val maxMovement = settings.topDistance.coerceAtMost(settings.bottomDistance).coerceAtLeast(3)
+        val positionChange = abs(event.oldPosition.line - event.newPosition.line)
+        return positionChange < maxMovement
     }
 }
