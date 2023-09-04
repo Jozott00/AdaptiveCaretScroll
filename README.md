@@ -17,8 +17,8 @@ Adaptive Caret Scroll is an IntelliJ IDEA plugin that enhances the editor's scro
 
 ## Roadmap
 
-- [ ] Always centered feature
-- [ ] Disable checkbox setting
+- [x] Always centered feature
+- [x] Disable checkbox setting
 
 ## Installation
 
