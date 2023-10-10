@@ -6,18 +6,25 @@ import com.dobodox.adaptivecaretscroll.settings.ScrollPluginSettingsService
 import com.intellij.openapi.editor.ScrollType
 import com.intellij.openapi.editor.event.CaretEvent
 import com.intellij.openapi.editor.event.CaretListener
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import kotlin.math.abs
 
 /**
  * ScrollCaretListener listens to changes in caret position in an editor and adjusts the scrolling behavior.
  */
-class ScrollCaretListener : CaretListener {
+class ScrollCaretListener : CaretListener, MouseAdapter() {
+
+    private var isMousePressed = false
 
     /**
      * Called when the caret position changes in the editor.
      * @param event An instance of CaretEvent containing details about the caret position change.
      */
     override fun caretPositionChanged(event: CaretEvent) {
+        // if mouse is currently dragged, don't manipulate scroll behaviour
+        if (isMousePressed) return
+
         // Retrieve user-defined settings for the distance to the top and bottom
         val settings = ScrollPluginSettingsService.getInstance().state
         // do nothing if disabled
@@ -63,6 +70,14 @@ class ScrollCaretListener : CaretListener {
             val newScrollY = scrollingModel.verticalScrollOffset - deltaY
             scrollingModel.scrollVertically(newScrollY)
         }
+    }
+
+    override fun mousePressed(e: MouseEvent?) {
+        this.isMousePressed = true;
+    }
+
+    override fun mouseReleased(e: MouseEvent?) {
+        this.isMousePressed = false;
     }
 
     private fun inCaretMovementThreshold(event: CaretEvent, settings: ScrollPluginSettings): Boolean {

@@ -36,7 +36,7 @@ class ScrollPluginStartup : StartupActivity {
         // Add the CaretListener to each open editor that is an instance of TextEditor
         for (fileEditor in openEditors) {
             if (fileEditor is TextEditor) {
-                fileEditor.editor.caretModel.addCaretListener(scrollListener)
+                EditorScrollManager.attachToEditor(scrollListener, fileEditor.editor)
             }
         }
 

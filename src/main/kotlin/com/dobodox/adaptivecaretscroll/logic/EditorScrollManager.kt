@@ -1,6 +1,7 @@
 package com.dobodox.adaptivecaretscroll.logic
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.editor.event.EditorFactoryEvent
 import com.intellij.openapi.editor.event.EditorFactoryListener
@@ -19,15 +20,22 @@ class EditorScrollManager(private val scrollListener: ScrollCaretListener) : Edi
         editorFactory.addEditorFactoryListener(this, this)
     }
 
+    companion object {
+        fun attachToEditor( scrollListener: ScrollCaretListener, editor: Editor) {
+            editor.caretModel.addCaretListener(scrollListener)
+            editor.contentComponent.addMouseListener(scrollListener)
+        }
+    }
+
+
     /**
      * Called when a new editor is created.
      * @param event An instance of EditorFactoryEvent containing details about the newly created editor.
      */
     override fun editorCreated(event: EditorFactoryEvent) {
         val editor = event.editor
-        val caretModel = editor.caretModel
         // Attach the scrollListener to the newly created editor
-        caretModel.addCaretListener(scrollListener)
+        attachToEditor(scrollListener, editor)
     }
 
     /**
@@ -39,6 +47,7 @@ class EditorScrollManager(private val scrollListener: ScrollCaretListener) : Edi
         val caretModel = editor.caretModel
         // Remove the scrollListener from the released editor
         caretModel.removeCaretListener(scrollListener)
+        editor.contentComponent.removeMouseListener(scrollListener)
     }
 
     /**

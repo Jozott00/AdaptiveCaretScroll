@@ -5,10 +5,11 @@ import com.intellij.ui.TitledSeparator
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.fields.IntegerField
 import com.intellij.util.ui.FormBuilder
-import java.awt.Component
 import java.awt.FlowLayout
-import java.awt.Font
-import javax.swing.*
+import javax.swing.BorderFactory
+import javax.swing.JCheckBox
+import javax.swing.JComponent
+import javax.swing.JPanel
 
 
 /**
