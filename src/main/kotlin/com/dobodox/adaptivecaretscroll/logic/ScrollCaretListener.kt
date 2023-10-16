@@ -6,14 +6,14 @@ import com.dobodox.adaptivecaretscroll.settings.ScrollPluginSettingsService
 import com.intellij.openapi.editor.ScrollType
 import com.intellij.openapi.editor.event.CaretEvent
 import com.intellij.openapi.editor.event.CaretListener
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
+import com.intellij.openapi.editor.event.EditorMouseEvent
+import com.intellij.openapi.editor.event.EditorMouseListener
 import kotlin.math.abs
 
 /**
  * ScrollCaretListener listens to changes in caret position in an editor and adjusts the scrolling behavior.
  */
-class ScrollCaretListener : CaretListener, MouseAdapter() {
+class ScrollCaretListener : CaretListener, EditorMouseListener {
 
     private var isMousePressed = false
 
@@ -72,12 +72,31 @@ class ScrollCaretListener : CaretListener, MouseAdapter() {
         }
     }
 
-    override fun mousePressed(e: MouseEvent?) {
-        this.isMousePressed = true;
+    override fun mousePressed(event: EditorMouseEvent) {
+        this.isMousePressed = true
+        super.mousePressed(event)
     }
 
-    override fun mouseReleased(e: MouseEvent?) {
-        this.isMousePressed = false;
+    override fun mouseReleased(event: EditorMouseEvent) {
+        super.mouseReleased(event)
+        val editor = event.editor
+
+        // Return if there is a selection or if there are multiple carets
+        if(!this.isEnabled() || editor.selectionModel.hasSelection() || editor.caretModel.caretCount != 1) {
+            this.isMousePressed = false
+            return
+        }
+
+        // Shift the caret up/down then back to force a caret position changed event.
+        // Release the mouse after the first event to prevent a needless double scroll.
+        val shift = if(editor.caretModel.logicalPosition.line < editor.document.lineCount-1) 1 else -1
+        editor.caretModel.moveCaretRelatively(0,shift,false,false,false)
+        this.isMousePressed = false
+        editor.caretModel.moveCaretRelatively(0,-shift,false,false,false)
+    }
+
+    fun isEnabled(): Boolean {
+        return ScrollPluginSettingsService.getInstance().state.enabled
     }
 
     private fun inCaretMovementThreshold(event: CaretEvent, settings: ScrollPluginSettings): Boolean {

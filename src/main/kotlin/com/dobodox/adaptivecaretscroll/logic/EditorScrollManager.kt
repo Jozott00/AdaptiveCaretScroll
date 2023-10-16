@@ -23,7 +23,7 @@ class EditorScrollManager(private val scrollListener: ScrollCaretListener) : Edi
     companion object {
         fun attachToEditor( scrollListener: ScrollCaretListener, editor: Editor) {
             editor.caretModel.addCaretListener(scrollListener)
-            editor.contentComponent.addMouseListener(scrollListener)
+            editor.addEditorMouseListener(scrollListener)
         }
     }
 
@@ -47,7 +47,7 @@ class EditorScrollManager(private val scrollListener: ScrollCaretListener) : Edi
         val caretModel = editor.caretModel
         // Remove the scrollListener from the released editor
         caretModel.removeCaretListener(scrollListener)
-        editor.contentComponent.removeMouseListener(scrollListener)
+        editor.removeEditorMouseListener(scrollListener)
     }
 
     /**
