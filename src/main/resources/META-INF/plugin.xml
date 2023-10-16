@@ -34,4 +34,11 @@
             displayName="Adaptive Caret Scroll"/>
     </extensions>
 
+    <change-notes><![CDATA[
+    <h2>Bug Fix</h2>
+    <p>When dragging the Mouse, the plugin won't directly scroll to the new caret. This makes working with the adaptive scroll much
+    more convenient.</p>
+    ]]></change-notes>
+
+
 </idea-plugin>
