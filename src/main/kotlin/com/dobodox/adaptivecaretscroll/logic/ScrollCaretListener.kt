@@ -89,13 +89,24 @@ class ScrollCaretListener : CaretListener, EditorMouseListener {
 
         // Shift the caret up/down then back to force a caret position changed event.
         // Release the mouse after the first event to prevent a needless double scroll.
-        val shift = if(editor.caretModel.logicalPosition.line < editor.document.lineCount-1) 1 else -1
+        val logicalPosition = editor.caretModel.logicalPosition
+        val visibleArea = editor.scrollingModel.visibleArea
+        val yLinePosInView = editor.logicalPositionToXY(logicalPosition).y - visibleArea.y;
+
+        // If caret in upper half of document, shift down, otherwise shift up
+        val shift = if (yLinePosInView < visibleArea.height / 2) 1 else -1
+
+        // This event will not trigger a scroll (as internally mouse is still pressed)
         editor.caretModel.moveCaretRelatively(0,shift,false,false,false)
+
+        // Release mouse internally
         this.isMousePressed = false
+        // This event will trigger the scroll to the current caret position
         editor.caretModel.moveCaretRelatively(0,-shift,false,false,false)
     }
 
-    fun isEnabled(): Boolean {
+
+    private fun isEnabled(): Boolean {
         return ScrollPluginSettingsService.getInstance().state.enabled
     }
 
