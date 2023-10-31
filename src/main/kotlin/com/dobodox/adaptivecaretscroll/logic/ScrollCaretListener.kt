@@ -71,7 +71,11 @@ class ScrollCaretListener : CaretListener, EditorMouseListener {
         val yLinePosInView = editor.logicalPositionToXY(logicalPosition).y - visibleArea.y
 
         // If caret in upper half of document, shift down, otherwise shift up
-        val shift = if (yLinePosInView < visibleArea.height / 2) 1 else -1
+        val inUpperHalf = yLinePosInView < visibleArea.height / 2
+        var shift = if (inUpperHalf) 1 else -1
+
+        // Check if in last line of document and in upper half -> no shift. Fixes https://github.com/Jozott00/AdaptiveCaretScroll/issues/4
+        if (inUpperHalf && logicalPosition.line + 1 == editor.document.lineCount) shift = 0
 
         // This event will not trigger a scroll (as internally mouse is still pressed)
         editor.caretModel.moveCaretRelatively(0,shift,false,false,false)
