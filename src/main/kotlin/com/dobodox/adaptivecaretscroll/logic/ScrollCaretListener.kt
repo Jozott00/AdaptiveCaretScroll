@@ -1,5 +1,6 @@
 package com.dobodox.adaptivecaretscroll.logic
 
+import com.dobodox.adaptivecaretscroll.settings.PaddingUnit
 import com.dobodox.adaptivecaretscroll.settings.ScrollMode
 import com.dobodox.adaptivecaretscroll.settings.ScrollPluginSettings
 import com.dobodox.adaptivecaretscroll.settings.ScrollPluginSettingsService
@@ -107,9 +108,25 @@ class ScrollCaretListener : CaretListener, EditorMouseListener {
         // Get distance of caret to top and bottom of editor in lines
         val (linesToTop, linesToBottom) = getLinesToEdges(editor)
 
-        adjustScrollingPosition(event, settings.topDistance, linesToTop, true)
-        adjustScrollingPosition(event, settings.bottomDistance, linesToBottom, false)
+        // if relative calculate lines based on editor's visible area
+        val (desiredLinesTop, desiredLinesBottom) = when(settings.paddingUnit) {
+            PaddingUnit.Line -> Pair(settings.topDistance, settings.bottomDistance)
+            PaddingUnit.Relative -> Pair(
+                calculateLinesWithRelativePadding(settings.topDistance, editor),
+                calculateLinesWithRelativePadding(settings.bottomDistance, editor)
+            )
+        }
+
+        // check if paddings collide in center. if so -> use centered scrolling
+        if (desiredLinesBottom + desiredLinesBottom >= calculateLinesWithRelativePadding(100, editor)) {
+            return scrollToCenter(event);
+        }
+
+        adjustScrollingPosition(event, desiredLinesTop, linesToTop, true)
+        adjustScrollingPosition(event, desiredLinesBottom, linesToBottom, false)
     }
+
+
 
     // Adjust scrolling position based on caret's position and movement direction
     private fun adjustScrollingPosition(event: CaretEvent, desiredLines: Int, linesToEdge: Int, checkForTop: Boolean) {
@@ -125,6 +142,19 @@ class ScrollCaretListener : CaretListener, EditorMouseListener {
             // Scroll to the new position
             editor.scrollingModel.scrollVertically(newScrollY)
         }
+    }
+
+    /**
+     * Calculates the number of lines with relative padding based on the given padding percentage and editor.
+     *
+     * @param paddingPercentage the percentage of padding to apply on the visible lines
+     * @param editor the editor for which the number of lines is calculated
+     * @return the number of lines with relative padding
+     */
+    private fun calculateLinesWithRelativePadding(paddingPercentage: Int, editor: Editor): Int {
+        val relativePadding = paddingPercentage.toFloat() / 100
+        val visibleLines = editor.scrollingModel.visibleArea.height / editor.lineHeight
+        return (visibleLines * relativePadding).toInt()
     }
 
     // Returns the number of lines from the caret to the top and bottom edge.
