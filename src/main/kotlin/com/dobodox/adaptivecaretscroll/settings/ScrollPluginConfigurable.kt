@@ -26,8 +26,9 @@ class ScrollPluginConfigurable : Configurable {
      */
     override fun isModified(): Boolean {
         val settings = ScrollPluginSettingsService.getInstance().state
-        return settings.bottomDistance != component?.getBottomLines()
-                || settings.topDistance != component?.getTopLines()
+        return settings.bottomDistance != component?.getBottomPadding()
+                || settings.topDistance != component?.getTopPadding()
+                || settings.paddingUnit != component?.getPaddingUnit()
                 || settings.scrollMode != component?.getScrollMode()
                 || settings.enabled != component?.isEnabled()
 
@@ -38,10 +39,12 @@ class ScrollPluginConfigurable : Configurable {
      * Applies the modified settings.
      */
     override fun apply() {
-        val bottom = component?.getBottomLines() ?: return
-        val top = component?.getTopLines() ?: return
+        val bottom = component?.getBottomPadding() ?: return
+        val top = component?.getTopPadding() ?: return
+        val paddingUnit = component?.getPaddingUnit() ?: return
         val scrollMode = component?.getScrollMode() ?: return
         val enabled = component?.isEnabled() ?: return
+
 
         ScrollPluginSettingsService
             .getInstance()
@@ -49,6 +52,7 @@ class ScrollPluginConfigurable : Configurable {
                 enabled = enabled,
                 bottomDistance = bottom,
                 topDistance = top,
+                paddingUnit = paddingUnit,
                 scrollMode = scrollMode
             ))
     }
@@ -77,8 +81,9 @@ class ScrollPluginConfigurable : Configurable {
 
         component?.setEnabled(settings.state.enabled)
         component?.setScrollMode(settings.state.scrollMode)
-        component?.setTopLines(settings.state.topDistance)
-        component?.setBottomLines(settings.state.bottomDistance)
+        component?.setPaddingUnit(settings.state.paddingUnit)
+        component?.setTopPadding(settings.state.topDistance)
+        component?.setBottomPadding(settings.state.bottomDistance)
     }
 
     /**

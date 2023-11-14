@@ -24,27 +24,36 @@ class PluginSettingsComponent {
             updateFieldAccessibility()
         }
     }
-    private val topLines = IntegerField()
-    private val bottomLines = IntegerField()
+    private val paddingTop = IntegerField()
+    private val paddingBottom = IntegerField()
     private val scrollModeDropdown = ComboBox(ScrollMode.values()).apply {
         addItemListener {
             updatePaddingFieldsVisibility()
         }
     }
+    private val paddingUnitDropdown = ComboBox(PaddingUnit.values()).apply {
+        addItemListener {
+            updatePadDescriptors()
+        }
+    }
 
+    // Descriptors of padding input "line" or "%"
+    private val padDescriptorTop = JBLabel(getPadDescriptorText(getPaddingUnit()));
+    private val padDescriptorBottom = JBLabel(getPadDescriptorText(getPaddingUnit()));
 
     private val paddingForm = FormBuilder.createFormBuilder().apply {
-        val input = { field: IntegerField ->
+        val input = { field: IntegerField, desc: JBLabel ->
             val flowLayoutPanel = JPanel(FlowLayout(FlowLayout.LEFT, 0, 0))
             flowLayoutPanel.add(field)
-            flowLayoutPanel.add(JBLabel(" lines"))
+            flowLayoutPanel.add(desc)
             flowLayoutPanel
         }
 
         addComponent(TitledSeparator("Padding Settings"))
         addComponent(FormBuilder.createFormBuilder().apply {
-            addLabeledComponent("Top padding:", input(topLines))
-            addLabeledComponent("Bottom padding:", input(bottomLines))
+            addLabeledComponent("Padding unit:", paddingUnitDropdown)
+            addLabeledComponent("Top padding:", input(paddingTop, padDescriptorTop))
+            addLabeledComponent("Bottom padding:", input(paddingBottom, padDescriptorBottom))
 
             panel.border = BorderFactory.createEmptyBorder(0, 20, 0, 0)
         }.panel)
@@ -81,9 +90,16 @@ class PluginSettingsComponent {
 
     private fun updateFieldAccessibility() {
         val isActivated = activateCheckbox.isSelected
-        topLines.isEnabled = isActivated
-        bottomLines.isEnabled = isActivated
+        paddingTop.isEnabled = isActivated
+        paddingBottom.isEnabled = isActivated
+        paddingUnitDropdown.isEnabled = isActivated
         scrollModeDropdown.isEnabled = isActivated
+    }
+
+    private fun updatePadDescriptors() {
+        val unit = getPaddingUnit()
+        padDescriptorTop.text = getPadDescriptorText(unit)
+        padDescriptorBottom.text = getPadDescriptorText(unit)
     }
 
     /**
@@ -110,35 +126,51 @@ class PluginSettingsComponent {
         scrollModeDropdown.selectedItem = mode
     }
 
+    fun getPaddingUnit(): PaddingUnit {
+        return paddingUnitDropdown.selectedItem as PaddingUnit
+    }
+
+    fun setPaddingUnit(unit: PaddingUnit) {
+        paddingUnitDropdown.selectedItem = unit
+        updatePadDescriptors()
+    }
+
     /**
      * Retrieves the user-defined bottom padding in lines.
      * @return Integer value of bottom padding or null if input is not a valid integer.
      */
-    fun getBottomLines(): Int? {
-        return bottomLines.text.toIntOrNull()
+    fun getBottomPadding(): Int? {
+        return paddingBottom.text.toIntOrNull()
     }
 
     /**
      * Sets the bottom padding input field.
      * @param lines Integer value for bottom padding.
      */
-    fun setBottomLines(lines: Int) {
-        bottomLines.text = lines.toString()
+    fun setBottomPadding(lines: Int) {
+        paddingBottom.text = lines.toString()
     }
 
     /**
      * Retrieves the user-defined top padding in lines.
      * @return Integer value of top padding or null if input is not a valid integer.
      */
-    fun getTopLines(): Int? {
-        return topLines.text.toIntOrNull()
+    fun getTopPadding(): Int? {
+        return paddingTop.text.toIntOrNull()
     }
 
     /**
      * Sets the top padding input field.
      * @param lines Integer value for top padding.
      */
-    fun setTopLines(lines: Int) {
-        topLines.text = lines.toString()
+    fun setTopPadding(lines: Int) {
+        paddingTop.text = lines.toString()
+    }
+
+    private fun getPadDescriptorText(unit: PaddingUnit): String {
+        return when(unit) {
+            PaddingUnit.Line -> "lines"
+            PaddingUnit.Relative -> " %"
+        }
     }
 }

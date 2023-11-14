@@ -9,6 +9,7 @@ package com.dobodox.adaptivecaretscroll.settings
 data class ScrollPluginSettings(
     var enabled: Boolean = true,
     var scrollMode: ScrollMode = ScrollMode.Custom,
+    var paddingUnit: PaddingUnit = PaddingUnit.Line,
     var bottomDistance: Int = 10,
     var topDistance: Int = 10,
 
@@ -17,4 +18,13 @@ data class ScrollPluginSettings(
 enum class ScrollMode {
     Centered,
     Custom
+}
+
+enum class PaddingUnit(var str: String) {
+    Line("Line"),
+    Relative("Relative (%)"),;
+
+    override fun toString(): String {
+        return str
+    }
 }
