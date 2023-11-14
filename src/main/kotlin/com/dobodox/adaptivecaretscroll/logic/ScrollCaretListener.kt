@@ -118,8 +118,9 @@ class ScrollCaretListener : CaretListener, EditorMouseListener {
         }
 
         // check if paddings collide in center. if so -> use centered scrolling
-        if (desiredLinesBottom + desiredLinesBottom >= calculateLinesWithRelativePadding(100, editor)) {
-            return scrollToCenter(event);
+        val editorVisibleHeight = calculateLinesWithRelativePadding(100, editor)
+        if ((desiredLinesTop + desiredLinesBottom) >= editorVisibleHeight) {
+            return scrollToCenter(event)
         }
 
         adjustScrollingPosition(event, desiredLinesTop, linesToTop, true)
