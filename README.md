@@ -7,7 +7,7 @@
 
 ## Overview
 
-Adaptive Caret Scroll is an IntelliJ IDEA plugin that enhances the editor's scrolling behavior by maintaining a user-defined distance from the caret to the top and bottom edges of the editor. The plugin aims to improve code readability and the overall coding experience by optimizing the visible area around the caret. This project is implemented in Kotlin and uses the IntelliJ SDK.
+[Adaptive Caret Scroll is an IntelliJ IDEA plugin](https://plugins.jetbrains.com/plugin/22659-adaptive-caret-scroll) that enhances the editor's scrolling behavior by maintaining a user-defined distance from the caret to the top and bottom edges of the editor. The plugin aims to improve code readability and the overall coding experience by optimizing the visible area around the caret. This project is implemented in Kotlin and uses the IntelliJ SDK.
 
 ## Features
 
