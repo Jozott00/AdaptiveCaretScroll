@@ -19,6 +19,7 @@
 ## Roadmap
 
 - [x] Always centered feature
+- [x] Relative paddings
 - [x] Disable checkbox setting
 
 ## Installation
