@@ -2,7 +2,6 @@
 <idea-plugin>
     <id>com.dobodox.AdaptiveCaretScroll</id>
 
-
     <name>Adaptive Caret Scroll</name>
 
     <vendor email="official@johannes-zottele.at" url="https://github.com/Jozott00/AdaptiveCaretScroll">Jozott</vendor>
@@ -35,10 +34,8 @@
     </extensions>
 
     <change-notes><![CDATA[
-    <h2>Relative Paddings Feature</h2>
-    <p>It is now possible to set a editor window relative padding. This makes it easier to work with editor windows of different sizes.</p>
-    <h2>Bug Fix</h2>
-    <p>If the top and bottom paddings overlap, the scrolling falls back to centered scrolling</p>
+    <h2>Fix</h2>
+    <p>Ensure compatibility for 2023.3 builds</p>
     ]]></change-notes>
 
 
