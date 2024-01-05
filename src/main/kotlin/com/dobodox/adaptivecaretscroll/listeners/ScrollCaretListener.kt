@@ -1,4 +1,4 @@
-package com.dobodox.adaptivecaretscroll.logic
+package com.dobodox.adaptivecaretscroll.listeners
 
 import com.dobodox.adaptivecaretscroll.settings.PaddingUnit
 import com.dobodox.adaptivecaretscroll.settings.ScrollMode

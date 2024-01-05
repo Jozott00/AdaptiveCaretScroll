@@ -1,4 +1,4 @@
-package com.dobodox.adaptivecaretscroll.logic
+package com.dobodox.adaptivecaretscroll.listeners
 
 import com.dobodox.adaptivecaretscroll.services.CaretScrollService
 import com.intellij.openapi.components.service

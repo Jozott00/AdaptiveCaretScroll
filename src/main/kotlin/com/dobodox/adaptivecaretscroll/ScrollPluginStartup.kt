@@ -13,7 +13,7 @@ class ScrollPluginStartup : StartupActivity {
 
     /**
      * This method is invoked when the IntelliJ IDEA project starts up.
-     * It initializes the CaretListener for all open editors.
+     * It calls the project service to manage everything.
      *
      * @param project The project that is being opened.
      */
