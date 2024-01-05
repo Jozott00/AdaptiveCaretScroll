@@ -47,8 +47,6 @@ class EditorScrollManager(private val scrollListener: ScrollCaretListener) : Edi
         val caretModel = editor.caretModel
         // Remove the scrollListener from the released editor
         caretModel.removeCaretListener(scrollListener)
-        // TODO: Do we need this? Editor will remove the mouse listener anyways...
-        editor.removeEditorMouseListener(scrollListener)
     }
 
     /**
