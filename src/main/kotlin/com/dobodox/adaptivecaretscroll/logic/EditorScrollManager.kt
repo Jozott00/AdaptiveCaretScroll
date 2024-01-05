@@ -1,8 +1,7 @@
 package com.dobodox.adaptivecaretscroll.logic
 
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.editor.EditorFactory
+import com.dobodox.adaptivecaretscroll.services.CaretScrollService
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.event.EditorFactoryEvent
 import com.intellij.openapi.editor.event.EditorFactoryListener
 
@@ -12,20 +11,8 @@ import com.intellij.openapi.editor.event.EditorFactoryListener
  *
  * @param scrollListener The ScrollCaretListener instance that will be added to or removed from the editor's CaretModel.
  */
-class EditorScrollManager(private val scrollListener: ScrollCaretListener) : EditorFactoryListener, Disposable {
 
-    init {
-        // Register this instance as a listener for editor creation and release events
-        val editorFactory = EditorFactory.getInstance()
-        editorFactory.addEditorFactoryListener(this, this)
-    }
-
-    companion object {
-        fun attachToEditor( scrollListener: ScrollCaretListener, editor: Editor) {
-            editor.caretModel.addCaretListener(scrollListener)
-            editor.addEditorMouseListener(scrollListener)
-        }
-    }
+class EditorScrollManager(private val scrollListener: ScrollCaretListener) : EditorFactoryListener {
 
 
     /**
@@ -35,7 +22,8 @@ class EditorScrollManager(private val scrollListener: ScrollCaretListener) : Edi
     override fun editorCreated(event: EditorFactoryEvent) {
         val editor = event.editor
         // Attach the scrollListener to the newly created editor
-        attachToEditor(scrollListener, editor)
+        editor.project?.service<CaretScrollService>()
+            ?.attachScrollListenerToEditor(scrollListener, editor)
     }
 
     /**
@@ -49,10 +37,4 @@ class EditorScrollManager(private val scrollListener: ScrollCaretListener) : Edi
         caretModel.removeCaretListener(scrollListener)
     }
 
-    /**
-     * Called when resources should be released, although no resources are currently being managed.
-     */
-    override fun dispose() {
-        // No resources to release
-    }
 }

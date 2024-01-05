@@ -185,4 +185,5 @@ class ScrollCaretListener : CaretListener, EditorMouseListener {
         val positionChange = abs(event.oldPosition.line - event.newPosition.line)
         return positionChange < maxMovement
     }
+
 }
