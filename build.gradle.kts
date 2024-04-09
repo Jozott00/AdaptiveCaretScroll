@@ -1,3 +1,5 @@
+import org.jetbrains.intellij.or
+
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.9.21"
@@ -7,6 +9,7 @@ plugins {
 group = "com.dobodox"
 version = System.getenv("PLUGIN_VERSION")
 
+
 repositories {
     mavenCentral()
 }
@@ -14,7 +17,7 @@ repositories {
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-    version.set("2024.1")
+    version.set("2022.2")
     type.set("IC") // Target IDE Platform
 
     plugins.set(listOf(/* Plugin Dependencies */))
@@ -31,6 +34,7 @@ tasks {
     }
 
     patchPluginXml {
+        version.set(System.getenv("PLUGIN_VERSION").or("1.1.3"))
         sinceBuild.set("222")
         untilBuild.set("241.*")
     }
