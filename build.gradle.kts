@@ -34,9 +34,8 @@ tasks {
     }
 
     patchPluginXml {
-        version.set(System.getenv("PLUGIN_VERSION").or("1.1.3"))
+        version.set(System.getenv("PLUGIN_VERSION").or("1.1.5"))
         sinceBuild.set("242.2")
-        untilBuild.set("243.*")
     }
 
 //    signPlugin {
