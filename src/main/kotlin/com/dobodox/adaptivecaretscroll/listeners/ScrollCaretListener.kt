@@ -164,9 +164,12 @@ class ScrollCaretListener : CaretListener, EditorMouseListener {
         val logicalLineY = editor.logicalPositionToXY(logicalPosition).y
         val visibleArea = editor.scrollingModel.visibleArea
 
-        // Calculate distance from the caret to the bottom and top of the visible area in pixels
-        val distanceToBottom = visibleArea.y + visibleArea.height - logicalLineY
+        // Calculate distance from the caret baseline to the top of the visible area in pixels.
+        // For the bottom edge we measure from the bottom of the caret's line (baseline + lineHeight)
+        // so scrolling is triggered only when the entire line approaches the viewport edge.
         val distanceToTop = logicalLineY - visibleArea.y
+        val caretLineBottomY = logicalLineY + editor.lineHeight
+        val distanceToBottom = (visibleArea.y + visibleArea.height - caretLineBottomY).coerceAtLeast(0)
 
         // Convert the distances to line numbers
         val linesToBottom = distanceToBottom / editor.lineHeight
